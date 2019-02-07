@@ -11,8 +11,8 @@ import CoreLocation
 import Alamofire
 import SwiftyJSON
 
-class WeatherViewController: UIViewController, CLLocationManagerDelegate {
-    
+class WeatherViewController: UIViewController, CLLocationManagerDelegate, ChangeCityDelegate {
+
     //Constants
     let WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
     let APP_ID = "17cb2a090fba3cfcf880b83669883b76"
@@ -137,7 +137,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     
     
-    //Write the didFailWithError method here:
+    // Write the didFailWithError method here:
     // Tells the Delegate that it was unable to retrieve a location value (airplane mode, no internet, etc)
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error)
@@ -152,11 +152,19 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     
     //Write the userEnteredANewCityName Delegate method here:
-    
-    
+    func userEnteredANewCityName(city: String) {
+        print(city)
+    }
     
     //Write the PrepareForSegue Method here
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "changeCityName") {
+            
+            let destinationVC = segue.destination as! ChangeCityViewController
+            
+            destinationVC.delegate = self
+        }
+    }
     
     
     
