@@ -17,17 +17,17 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     let WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
     let APP_ID = "17cb2a090fba3cfcf880b83669883b76"
     
-
+    
     //TODO: Declare instance variables here
     let locationManager = CLLocationManager()
     let weatherDataModel = WeatherDataModel()
-
+    
     
     //Pre-linked IBOutlets
     @IBOutlet weak var weatherIcon: UIImageView!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var temperatureLabel: UILabel!
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,7 +65,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-
+    
     
     
     
@@ -73,20 +73,26 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     //MARK: - JSON Parsing
     /***************************************************************/
-   
+    
     
     //Write the updateWeatherData method here:
     func updateWeatherData(json: JSON) {
-        let tempResult = json["main"]["temp"].double
         
-        // Had to subtract 273.15 for Kelvins
-        weatherDataModel.temperature = Int(tempResult! - 273.15)
-        
-        weatherDataModel.city = json["name"].stringValue
-        
-        weatherDataModel.condition = json["weather"][0]["id"].intValue
+        if let tempResult = json["main"]["temp"].double {
+            
+            // Had to subtract 273.15 for Kelvins
+            weatherDataModel.temperature = Int(tempResult - 273.15)
+            
+            weatherDataModel.city = json["name"].stringValue
+            
+            weatherDataModel.condition = json["weather"][0]["id"].intValue
+            
+            weatherDataModel.updateWeatherIcon(condition: weatherDataModel.condition)
+        } else {
+            cityLabel.text = "Weather Unavailable"
+        }
     }
-
+    
     
     
     
@@ -133,7 +139,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     
-
+    
     
     //MARK: - Change City Delegate methods
     /***************************************************************/
@@ -141,7 +147,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     //Write the userEnteredANewCityName Delegate method here:
     
-
+    
     
     //Write the PrepareForSegue Method here
     
